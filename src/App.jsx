@@ -1,121 +1,105 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
+import Calendar from 'react-calendar'
+import './Calendar.css'
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis } from 'recharts';
+import { IconCalendarWeek } from '@tabler/icons-react'
+
+const moodData = [
+  { date: 'Aug 19', mood: 4 },
+  { date: 'Aug 20', mood: 5 },
+  { date: 'Aug 21', mood: 3 },
+  { date: 'Aug 22', mood: 10 },
+  { date: 'Aug 23', mood: 2 },
+  { date: 'Aug 24', mood: 5 },
+  { date: 'Aug 25', mood: 1 },
+]
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app">
+      <aside className="sidebar">
 
-      <div className="ticks"></div>
+        <div className="block" id='calendar'>
+          <div className='blockHeader'>
+            <IconCalendarWeek/>          
+            <p className='blockTitle'>Calendar</p>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <Calendar value={new Date()} />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <div className="block" id='moodChart'>
+          <div className="blockHeader">
+            <p className='blockTitle'>Mood Chart</p>
+          </div>
+          <LineChart
+            width={360}
+            height={140}
+            data={moodData}
+            margin={{ left: -38, right: 0 }}
+          >
+            <defs>
+              <linearGradient
+                id="moodGradient"
+                x1="0"
+                y1="140"
+                x2="0"
+                y2="0"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0%" stopColor="#f52626" />
+                <stop offset="20%" stopColor="#f52626" />
+
+                <stop offset="30%" stopColor="#f56826" />
+                <stop offset="40%" stopColor="#f9b516" />
+
+                <stop offset="50%" stopColor="#eff223" />
+                <stop offset="60%" stopColor="#8bf01f" />
+
+                <stop offset="70%" stopColor="#84cc19" />
+                <stop offset="80%" stopColor="#5fcc16" />
+
+                <stop offset="90%" stopColor="#22c54b" />
+                <stop offset="100%" stopColor="#1ba24a" />
+              </linearGradient>
+            </defs>
+
+            <XAxis
+              dataKey="date"
+              interval={0}
+              padding={{ left: 20, right: 20 }}
+              tick={{ fontSize: 12 }}
+            />
+            <YAxis
+              domain={[0, 10.5]}
+              ticks={[0, 5, 10]}
+              tick={{ fontSize: 12 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="mood"
+                stroke="url(#moodGradient)"
+              strokeWidth={2}
+              dot={{ r: 3 }}
+            />
+          </LineChart>
+        </div>
+
+        <div className="block" id='sphereStats'>Sphere Stats</div>
+
+        <div className="block" id='topEmotions'>Top Emotions</div>
+      </aside>
+
+      <div className="content">
+
+        <main className="main">
+          <div className="block" id='dailyMood'>Daily Mood</div>
+          <div className="block">Mood Entry</div>
+        </main>
+      </div>
+    </div>
   )
 }
 
